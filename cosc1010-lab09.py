@@ -1,9 +1,9 @@
-# Your Name Here
+# Peter Martinez
 # UWYO COSC 1010
-# Submission Date
-# Lab XX
-# Lab Section:
-# Sources, people worked with, help given to:
+# 11/17/2024
+# Lab 09
+# Lab Section: 12
+# Sources, people worked with, help given to: ChatGPT had to help me big time with accessing methods between classes and then fixing errors with the methods picking up things they weren't supposed to be
 # Your
 # Comments
 # Here
@@ -78,6 +78,100 @@
 # - After the order is placed, call the getReceipt() method.
 # - Repeat the loop as needed.
 # - AFTER the loop, print how many orders were placed.
+
+class Pizza:
+    def __init__(self, size, sauce = 'Tomato'):
+        self.size = size
+        self.sauce = sauce
+        self.toppings = ["Cheese"]
+        
+    def getSauce(self):
+        return self.sauce
+
+    def setSize(self, size):
+        if self.size < 10:
+            print("Your pizza is too small! Defaulting to 10 inches.")
+            self.size = 10
+
+    def getSize(self):
+        return self.size
+
+    def addToppings(self, toppings):
+        for topping in toppings:
+            self.toppings.append(topping)
+    
+    def getToppings(self):
+        return self.toppings
+
+    def amtToppings(self):
+        return len(self.toppings)
+
+class Pizzeria:
+    def __init__(self, orders, topPrice, sizePrice, pizzas):
+        self.orders = orders
+        self.topPrice = topPrice
+        self.sizePrice = sizePrice
+        self.pizzas = pizzas
+    def placeOrder(self):
+        try:
+            size = int(input("Please enter a size for your pizza that is greater than or equal to 10 inches: "))
+            if size < 10:
+                print("Your pizza is too small! Defaulting to 10 inches.")
+                size = 10
+        except ValueError:
+            print("Invalid input! Defaulting to 10 inches.")
+            size = 10 
+        self.orders += 1
+        newPizza = Pizza(size) 
+        askSauce = input("Please input a sauce type for your pizza! Leave blank for Tomato sauce: ")
+        if askSauce:
+            newPizza.sauce = askSauce
+        toppings = []
+        active2 = True
+        while active2:
+            askTopping = input("Please input a topping for your pizza. Type 'Stop' to finish: ")
+            if askTopping.lower() == "stop":
+                active2 = False
+                break
+            else:
+                toppings.append(askTopping)
+        newPizza.addToppings(toppings)
+        self.pizzas.append(newPizza)
+    def getPrice(self, pizza):
+        price = (pizza.getSize() * self.sizePrice) + (pizza.amtToppings() * self.topPrice)
+        return price
+    def getReceipt(self, pizza):
+        print("Here is your pizza!")
+        print(f"Size: {pizza.getSize()} inches\nSauce: {pizza.getSauce()}\n Toppings: {pizza.getToppings()}\n\nPrice for Size: ${(pizza.getSize() * self.sizePrice)}\nPrice for Toppings: ${pizza.amtToppings() * self.topPrice}\n\nTotal Price: ${self.getPrice(pizza)}")
+    def getNumOrders(self):
+        return self.orders
+
+
+
+pizzaTime = Pizzeria(orders=0, topPrice=0.30, sizePrice=0.60, pizzas=[])
+active = True
+while active:
+    askPizza = input("Would you like to order a pizza? Type 'Yes' to get started, and 'No' to stop the program.")
+    if askPizza.lower() == "no":
+        active = False
+        break
+    elif askPizza.lower() == "yes":
+        pizzaTime.placeOrder()
+        pizzaTime.getReceipt(pizzaTime.pizzas[-1])
+    if askPizza.lower() != "yes" and askPizza.lower() != "no":
+        print("Invalid input!")
+        continue
+print(f"Total pizzas ordered: {pizzaTime.getNumOrders()}. Thank you for ordering!")
+
+
+
+
+
+
+
+
+
+
 
 
 # Example output:
